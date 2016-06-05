@@ -28,8 +28,7 @@ exports.getInfo = function(req, res) {
         });
       else
         res.status(200).send({
-          msg: 'User found, incorrect password',
-          user: user
+          msg: 'User found, incorrect password'
         });
     }
   });
@@ -40,15 +39,14 @@ exports.register = function(req, res) {
     email: req.body.email
   }).exec(function(err, user) {
     if (err)
-      res.status(400).send({
-        msg: 'Error getting user',
+      res.status(200).send({
+        msg: 'Error registering user',
         err: err
       });
 
     if (user) {
       res.status(200).send({
-        msg: 'Email address already taken',
-        user: user
+        msg: 'Email is address already taken'
       });
     } else {
       var appUser = new AppUser({
@@ -59,7 +57,7 @@ exports.register = function(req, res) {
       });
       appUser.save(function(err) {
         if (err)
-          res.status(400).send({
+          res.status(200).send({
             msg: 'Error saving user',
             err: err
           });
