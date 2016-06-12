@@ -12,6 +12,7 @@ module.exports = function(app) {
 
   app.route('/api/register').post(appuser.register);
   app.route('/api/getInfo').post(appuser.getInfo);
+  app.route('/api/getStudents').get(appuser.getStudents);
   // Setting up the users password api
   app.route('/api/auth/forgot').post(users.forgot);
   app.route('/api/auth/reset/:token').get(users.validateResetToken);

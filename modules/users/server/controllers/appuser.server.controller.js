@@ -33,7 +33,32 @@ exports.getInfo = function(req, res) {
     }
   });
 };
+exports.getStudents = function(req, res) {
+  console.log('collecting students');
+  AppUser.find({
+    'faculty': false
+  }).exec(function(err, user) {
+    if (err)
+      res.status(200).send({
+        msg: 'Error getting students list',
+        err: err
+      });
 
+    if (!user) {
+      res.status(200).send({
+        msg: 'No Student Found'
+      });
+    } else {
+      console.log('students: ', user);
+
+      res.status(200).send({
+        msg: 'Student List',
+        students: user
+      });
+
+    }
+  });
+};
 exports.register = function(req, res) {
   AppUser.findOne({
     email: req.body.email
@@ -51,6 +76,7 @@ exports.register = function(req, res) {
     } else {
       var appUser = new AppUser({
         userName: req.body.userName,
+        fullName: req.body.fullName,
         password: req.body.password,
         email: req.body.email,
         faculty: req.body.faculty

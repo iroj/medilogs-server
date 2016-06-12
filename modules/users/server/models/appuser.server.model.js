@@ -10,6 +10,9 @@ var AppUserSchema = new Schema({
   userName: {
     type: String
   },
+  fullName: {
+    type: String
+  },
   password: {
     type: String
   },
@@ -17,7 +20,8 @@ var AppUserSchema = new Schema({
     type: String
   },
   faculty: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   created: {
     type: Date,

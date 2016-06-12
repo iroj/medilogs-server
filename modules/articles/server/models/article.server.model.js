@@ -14,19 +14,27 @@ var ArticleSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  title: {
-    type: String,
-    default: '',
-    trim: true,
-    required: 'Title cannot be blank'
+  date: {
+    type: Date
   },
-  content: {
-    type: String,
-    default: '',
-    trim: true
+  clinicType: {
+    type: String
   },
-  user: {
-    type: Schema.ObjectId,
+  encounterType: {
+    type: String
+  },
+  performance: {
+    type: Object
+  },
+  special: {
+    type: Object
+  },
+  student: {
+    type: Object,
+    ref: 'User'
+  },
+  faculty: {
+    type: Object,
     ref: 'User'
   }
 });

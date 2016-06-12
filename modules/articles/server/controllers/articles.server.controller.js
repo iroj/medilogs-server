@@ -11,11 +11,11 @@ var path = require('path'),
 /**
  * Create an article
  */
-exports.create = function (req, res) {
+exports.create = function(req, res) {
+  var a = req.body;
   var article = new Article(req.body);
-  article.user = req.user;
 
-  article.save(function (err) {
+  article.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -29,7 +29,7 @@ exports.create = function (req, res) {
 /**
  * Show the current article
  */
-exports.read = function (req, res) {
+exports.read = function(req, res) {
   // convert mongoose document to JSON
   var article = req.article ? req.article.toJSON() : {};
 
@@ -43,13 +43,13 @@ exports.read = function (req, res) {
 /**
  * Update an article
  */
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   var article = req.article;
 
   article.title = req.body.title;
   article.content = req.body.content;
 
-  article.save(function (err) {
+  article.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -63,10 +63,10 @@ exports.update = function (req, res) {
 /**
  * Delete an article
  */
-exports.delete = function (req, res) {
+exports.delete = function(req, res) {
   var article = req.article;
 
-  article.remove(function (err) {
+  article.remove(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -80,8 +80,8 @@ exports.delete = function (req, res) {
 /**
  * List of Articles
  */
-exports.list = function (req, res) {
-  Article.find().sort('-created').populate('user', 'displayName').exec(function (err, articles) {
+exports.list = function(req, res) {
+  Article.find().sort('-created').populate('user', 'displayName').exec(function(err, articles) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -95,23 +95,74 @@ exports.list = function (req, res) {
 /**
  * Article middleware
  */
-exports.articleByID = function (req, res, next, id) {
+exports.student = function(req, res) {
+  // var a = req.body;
+  //   // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   //   return res.status(400).send({
+  //   //     message: 'Article is invalid'
+  //   //   });
+  //   // }
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Article is invalid'
-    });
-  }
+  //   Article.find(id).exec(function(err, article) {
+  //     if (err) {
+  //       return next(err);
+  //     } else if (!article) {
+  //       return res.status(404).send({
+  //         message: 'No article with that identifier has been found'
+  //       });
+  //     }
+  //     req.article = article;
+  //     next();
+  //   });
+};
 
-  Article.findById(id).populate('user', 'displayName').exec(function (err, article) {
+
+exports.faculty = function(req, res) {
+
+  console.log(req.body);
+  Article.find({
+    'faculty._id': req.body._id
+  }).exec(function(err, article) {
     if (err) {
-      return next(err);
+      res.status(200).send({
+        msg: 'Error getting evaluations',
+        err: err
+      });
     } else if (!article) {
-      return res.status(404).send({
-        message: 'No article with that identifier has been found'
+      return res.status(200).send({
+        msg: 'No evaluations done',
+        err: err
       });
     }
-    req.article = article;
-    next();
+    console.log(article);
+    res.status(200).send({
+      msg: 'Evaluations found',
+      evaluations: article
+    });
+  });
+};
+
+exports.student = function(req, res) {
+
+  console.log(req.body);
+  Article.find({
+    'student._id': req.body._id
+  }).exec(function(err, article) {
+    if (err) {
+      res.status(200).send({
+        msg: 'Error getting evaluations',
+        err: err
+      });
+    } else if (!article) {
+      return res.status(200).send({
+        msg: 'No evaluations done',
+        err: err
+      });
+    }
+    console.log(article);
+    res.status(200).send({
+      msg: 'Evaluations found',
+      evaluations: article
+    });
   });
 };
