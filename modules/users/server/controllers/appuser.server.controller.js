@@ -96,3 +96,34 @@ exports.register = function(req, res) {
     }
   });
 };
+
+exports.edit = function(req, res) {
+  AppUser.findOne({
+    _id: req.body._id
+  }).exec(function(err, user) {
+    console.log(user);
+    if (user) {
+      console.log(user);
+      user.fullName = req.body.fullName;
+      user.email = req.body.email;
+      user.userName = req.body.userName;
+      console.log(user);
+      user.save(function(err) {
+        if (err)
+          res.status(200).send({
+            msg: 'Error saving user',
+            err: err
+          });
+        res.status(200).send({
+          msg: 'User updated',
+          user: user
+        });
+      });
+    } else {
+      res.status(200).send({
+        msg: 'Error saving user',
+        err: err
+      });
+    }
+  });
+};

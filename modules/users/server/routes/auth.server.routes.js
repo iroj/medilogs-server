@@ -11,6 +11,7 @@ module.exports = function(app) {
   var appuser = require('../controllers/appuser.server.controller');
 
   app.route('/api/register').post(appuser.register);
+  app.route('/api/edit').post(appuser.edit);
   app.route('/api/getInfo').post(appuser.getInfo);
   app.route('/api/getStudents').get(appuser.getStudents);
   // Setting up the users password api
