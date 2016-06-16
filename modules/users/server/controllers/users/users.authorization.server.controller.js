@@ -5,7 +5,7 @@
  */
 var _ = require('lodash'),
   mongoose = require('mongoose'),
-  User = mongoose.model('User');
+  AppUser = mongoose.model('AppUser');
 
 /**
  * User middleware
@@ -17,7 +17,7 @@ exports.userByID = function (req, res, next, id) {
     });
   }
 
-  User.findOne({
+  AppUser.findOne({
     _id: id
   }).exec(function (err, user) {
     if (err) {

@@ -5,29 +5,29 @@
  */
 var path = require('path'),
   mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
+  // User = mongoose.model('User'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  AppUser = mongoose.model('AppUser');
 /**
  * Show the current user
  */
-exports.read = function (req, res) {
+exports.read = function(req, res) {
   res.json(req.model);
 };
 
 /**
  * Update a User
  */
-exports.update = function (req, res) {
+exports.update = function(req, res) {
   var user = req.model;
 
   // For security purposes only merge these parameters
-  user.firstName = req.body.firstName;
-  user.lastName = req.body.lastName;
-  user.displayName = user.firstName + ' ' + user.lastName;
-  user.roles = req.body.roles;
+  user.fullName = req.body.fullName;
+  user.userName = req.body.userName;
+  user.email = req.body.email;
+  user.faculty = req.body.faculty;
 
-  user.save(function (err) {
+  user.save(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -41,10 +41,10 @@ exports.update = function (req, res) {
 /**
  * Delete a user
  */
-exports.delete = function (req, res) {
+exports.delete = function(req, res) {
   var user = req.model;
 
-  user.remove(function (err) {
+  user.remove(function(err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -58,8 +58,8 @@ exports.delete = function (req, res) {
 /**
  * List of Users
  */
-exports.list = function (req, res) {
-  User.find({}, '-salt -password').sort('-created').populate('user', 'displayName').exec(function (err, users) {
+exports.list = function(req, res) {
+  AppUser.find().sort('-created').populate('user', 'fullName').exec(function(err, users) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -73,14 +73,14 @@ exports.list = function (req, res) {
 /**
  * User middleware
  */
-exports.userByID = function (req, res, next, id) {
+exports.userByID = function(req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'User is invalid'
     });
   }
 
-  User.findById(id, '-salt -password').exec(function (err, user) {
+  AppUser.findById(id).exec(function(err, user) {
     if (err) {
       return next(err);
     } else if (!user) {

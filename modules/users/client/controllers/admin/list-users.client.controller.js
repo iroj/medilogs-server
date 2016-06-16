@@ -16,6 +16,7 @@
     AdminService.query(function (data) {
       vm.users = data;
       vm.buildPager();
+      console.log(vm.users);
     });
 
     function buildPager() {
